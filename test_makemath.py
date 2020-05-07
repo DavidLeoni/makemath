@@ -1,4 +1,47 @@
 from makemath import *
+import string
+from hypothesis import given, reject
+from hypothesis.strategies import integers, text
+
+
+@given(text(min_size=1, alphabet=string.ascii_letters + string.digits + '-' + '.' + '_'))
+def test_label_mm_to_python(x):    
+    if '-_' not in x and '_-' not in x:
+        assert label_python_to_mm(label_mm_to_python(x)) == x
+
+def test_label_mm_to_python_cornercases():
+    try:
+        label_mm_to_python('')
+    except ValueError:
+        pass
+    try:
+        label_mm_to_python('-_')
+    except ValueError:
+        pass
+    try:
+        label_mm_to_python('_-')
+    except ValueError:
+        pass
+    try:
+        label_mm_to_python('è')
+    except ValueError:
+        pass
+    label_python_to_mm(label_mm_to_python('.')) == '.'
+    label_python_to_mm(label_mm_to_python('-')) == '-'
+    label_python_to_mm(label_mm_to_python('--')) == '--'
+    label_python_to_mm(label_mm_to_python('__')) == '__'
+    label_python_to_mm(label_mm_to_python('_')) == '_'
+
+@given(text(min_size=1,max_size=1, alphabet=string.ascii_letters + '_'), text(min_size=1, alphabet=string.ascii_letters + string.digits + '_'))
+def test_label_python_to_mm(x,y):
+    assert label_mm_to_python(label_python_to_mm(x+y)) == x+y
+
+def test_label_python_to_mm_cornercases():
+    try:
+        label_python_to_mm('')
+    except ValueError:
+        pass
+    
 
 def test_is_contained():
     v1 = Var('v1')

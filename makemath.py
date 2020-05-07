@@ -2,12 +2,91 @@
 
 import common
 from common import *
+import string
 
 # DAV Jupyter is driving me insane, method _repr_pretty_ is *not* inheritable !!  https://stackoverflow.com/a/41454816
 # so putting this in expr is *not* enough !!
 # def _repr_pretty_(self, p, cycle):
 #       p.text(str(self) if not cycle else '...')
 REPR_AS_STR = False
+
+MAKE_PREFIX = 'MAKE'
+MAKE_DOT = 'DOT'
+MAKE_HYPHEN = '_'
+MAKE_DOUBLE_HYPHEN = '_2_'
+MAKE_UNDERSCORE = '__'
+
+
+def label_mm_to_python(mm_label):
+    """ From Metamath book:
+    > Label tokens are used to identify Metamath statements for later reference.
+    > Label tokens may contain only letters, digits, and the three characters period,
+    > hyphen, and underscore:
+    > . - _
+
+    mm_label: any legal Metamath string is accepted 
+              EXCEPT strings containing '-_' or '_-' 
+    """            
+    if len(mm_label) == 0:
+        raise ValueError("Found empty Metamath label")
+    if '-_' in mm_label:
+        raise ValueError("Unhandled case -_ in Metamath label=%s"% mm_label)
+    if '_-' in mm_label:
+        raise ValueError("Unhandled case _- in Metamath label=%s"% mm_label)
+
+    ret = []
+    if mm_label[0].isdigit():
+        ret.extend(list(MAKE_PREFIX))
+    i = 0
+    while i < len(mm_label):
+        c = mm_label[i]
+        if c == '.':
+            ret.extend(list(MAKE_DOT))            
+        elif mm_label[i:].startswith('--'):
+            ret.extend(list(MAKE_DOUBLE_HYPHEN))
+            i += 1
+        elif c == '-':
+            ret.extend(list(MAKE_HYPHEN))            
+        elif c == '_':          
+            ret.extend(list(MAKE_UNDERSCORE))            
+        else:
+            if not(c in string.digits or c in string.ascii_letters):
+                raise ValueError('Found illegal character %s in Metamath label %s', (c, mm_label))
+            ret.append(c)
+            
+        i += 1
+    return ''.join(ret)
+
+def label_python_to_mm(python_label):
+    """ From Metamath book:
+    > Label tokens are used to identify Metamath statements for later reference.
+    > Label tokens may contain only letters, digits, and the three characters period,
+    > hyphen, and underscore:
+    > . - _
+    """    
+    if len(python_label) == 0:
+        raise ValueError("Found empty Python label")
+    ret = []
+    i = 0
+    if python_label.startswith(MAKE_PREFIX):
+        i += len(MAKE_PREFIX)
+    while i < len(python_label):
+        if python_label[i:].startswith(MAKE_DOT):
+            ret.append('.')
+            i += len(MAKE_DOT)            
+        elif python_label[i:].startswith(MAKE_UNDERSCORE):
+            ret.append('_')
+            i += len(MAKE_UNDERSCORE)
+        elif python_label[i:].startswith(MAKE_DOUBLE_HYPHEN):
+            ret.append('--')
+            i += len(MAKE_DOUBLE_HYPHEN)
+        elif python_label[i:].startswith(MAKE_HYPHEN):
+            ret.append('-')
+            i += len(MAKE_HYPHEN)
+        else:
+            ret.append(python_label[i])
+            i += 1
+    return ''.join(ret)
 
 
 def check_type(x, c):
