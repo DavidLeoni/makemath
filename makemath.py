@@ -109,7 +109,7 @@ def check_blank(name):
     if len(name.strip()) == 0:
         raise ValueError('String is blank: -->%s<--' & name)
 
-class expr:
+class Expr:
     def __eq__(self, other):
         return self.__class__ == other.__class__ and vars(self) == vars(other)
     
@@ -159,7 +159,7 @@ class expr:
 #The second property tells us there must be only one type specified for a variable.
 #   cit.: Chapter 4.2.7 Frames Matemath book
 
-class Var (expr):
+class Var (Expr):
     
     def __init__(self, name):
         check_blank(name)
@@ -173,7 +173,7 @@ class Var (expr):
 
 
 def get_vars(ex):
-    check_type(ex, expr)
+    check_type(ex, Expr)
     ret = set()
     stack = [ex]
     visited = set()
@@ -195,7 +195,7 @@ def get_vars(ex):
     
 def is_contained(x, ex):
     check_type(x, Var)
-    check_type(ex, expr)
+    check_type(ex, Expr)
     stack = [ex]
     # to prevent circular references. There should never be, but just in case ..
     visited = set()
@@ -218,8 +218,8 @@ def is_contained(x, ex):
 
 
 def shared_vars(ex1, ex2):
-    check_type(ex1, expr)
-    check_type(ex2, expr)
+    check_type(ex1, Expr)
+    check_type(ex2, Expr)
     return get_vars(ex1).intersection(get_vars(ex2))
     
 def are_disjoint(ex1, ex2):
@@ -256,11 +256,11 @@ def vy():
 x = vx()
 y = vy()
 
-class wff (expr):
+class wff (Expr):
     def __init__(self):
         pass
 
-class provable (expr):
+class provable (Expr):
     """ read: “the following symbol sequence is provable” or “a proof exists for”.
         In Metamath *by convention* provable expressions are prefixed by a turnstile
     """

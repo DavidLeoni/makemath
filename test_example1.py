@@ -1,4 +1,4 @@
-from makemath import Var, expr, check_type, check_eq, provable, wff, wffv
+from makemath import Var, Expr, check_type, check_eq, provable, wff, wffv
 from example1 import t,r,s,P,Q,tze,tpl,a1,a2,weq,wim, mp
 
 def test_example1():
@@ -19,4 +19,11 @@ def test_example1():
         pass
 
 def test_theorem():
-    assert mp(a2(t), mp(a2(t), a1(tpl(t,tze()),t,t))) == provable(weq(t,t))
+
+    actual = mp(a2(t), 
+                mp(a2(t), 
+                a1( tpl(t, tze()), t, t)) )
+
+    expected = provable(weq(t,t))
+
+    assert actual == expected

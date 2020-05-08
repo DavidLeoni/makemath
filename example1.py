@@ -1,12 +1,12 @@
 
-from makemath import Var, expr, check_type, check_eq, provable, wff, wffv
+from makemath import Var, Expr, check_type, check_eq, provable, wff, wffv
     
 # DAVID: don't know if it make any sense do 'declare' in Python ...
 """
 $( Declare the constant symbols we will use $)
     $c 0 + = -> ( ) term wff |- $.
 """
-class term (expr):
+class term (Expr):
     def __init__(self):
         pass
     

@@ -47,7 +47,7 @@ def test_is_contained():
     v1 = Var('v1')
     v2 = Var('v2')
     
-    class C (expr):
+    class C (Expr):
         def __init__(self,p1,p2=None):
             self.p1=p1
             self.p2=p2
@@ -66,7 +66,7 @@ def test_get_vars():
     v1 = Var('v1')
     v2 = Var('v2')
     
-    class C (expr):
+    class C (Expr):
         def __init__(self,p1,p2=None):
             self.p1=p1
             self.p2=p2
@@ -87,7 +87,7 @@ def test_shared_vars():
     v1 = Var('v1')
     v2 = Var('v2')
     
-    class C (expr):
+    class C (Expr):
         def __init__(self,p1=None,p2=None):
             self.p1=p1
             self.p2=p2
@@ -104,7 +104,7 @@ def test_are_disjoint():
     v1 = Var('v1')
     v2 = Var('v2')
     
-    class C (expr):
+    class C (Expr):
         def __init__(self,p1=None,p2=None):
             self.p1=p1
             self.p2=p2
