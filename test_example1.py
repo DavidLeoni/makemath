@@ -18,8 +18,12 @@ def test_example1():
     except ValueError:
         pass
 
- 
 def test_theorem_form1():
+    """ All in one line """    
+    assert mp(a2(t), mp(a2(t), a1( tpl(t, tze()), t, t))) == provable(weq(t,t))
+
+ 
+def test_theorem_form2():
     """ Separated into actual and expected """
 
     actual = mp(a2(t), 
@@ -29,11 +33,6 @@ def test_theorem_form1():
     expected = provable(weq(t,t))
 
     assert actual == expected
-
-
-def test_theorem_form2():
-    """ All in one line """    
-    assert mp(a2(t), mp(a2(t), a1( tpl(t, tze()), t, t))) == provable(weq(t,t))
 
 
 def test_theorem_form3():
