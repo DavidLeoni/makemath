@@ -11,8 +11,6 @@ class term (Expr):
         pass
     
 
-
-
     
 # DAVID: don't know if it make any sense do 'declare' in Python ...
 """ $( Declare the metavariables we will use $)
@@ -72,7 +70,7 @@ class tpl(term):
         self.r = r
 
     def __repr__(self):
-        return self._repr2(t,r)
+        return self._repr2(self.t,self.r)
         
     def op(self):
         return '+'
